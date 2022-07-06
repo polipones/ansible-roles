@@ -1,0 +1,10 @@
+---
+# Ansible vars
+#
+# Variables for unattended_upgrades role on legacy systems
+
+_config_mail_report:
+  key: 'Unattended-Upgrade::MailOnlyOnError'
+  value: 'true'
+
+...

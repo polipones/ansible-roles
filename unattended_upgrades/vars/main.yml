@@ -1,0 +1,16 @@
+---
+# Ansible vars
+#
+# Variables for unattended_upgrades role
+
+# default value for recent systems
+_config_mail_report:
+  key: 'Unattended-Upgrade::MailReport'
+  value: 'only-on-error'
+
+unattended_upgrades_config:
+  - key: 'Unattended-Upgrade::Mail'
+    value: 'root'
+  - '{{ _config_mail_report }}'
+
+...

@@ -1,0 +1,19 @@
+- name: Configure defined interfaces
+  template:
+    src: "etc/network/interfaces.j2"
+    dest: /etc/network/interfaces
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+  register: config_interface
+  when: >
+    (net_config_interfaces is defined and net_config_interfaces)
+
+- name: Restart network interfaces
+  shell: bash -c "ifdown {{ item.name }} --force && ifup {{ item.name }} --force"
+  with_items: "{{ net_interfaces }}"
+  when: >
+    (net_config_interfaces is defined and net_config_interfaces) and
+    (net_enable_configured_interfaces_after_defining or item['enable']) and
+    item['configure'] and
+    config_interface['changed']

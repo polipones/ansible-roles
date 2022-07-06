@@ -1,0 +1,42 @@
+# {{ ansible_managed }}
+# Any changes made here will be lost
+
+auto lo
+iface lo inet loopback
+
+{% if net_config_interfaces is defined and net_config_interfaces and net_interfaces != [] %}
+{%   for item in net_interfaces %}
+{%     if item['configure'] is defined and item['configure'] %}
+{%       if item['comment'] is defined and item['comment'] != None %}
+# {{ item['comment'] }}
+{%       endif %}
+{%       if item['method']|lower == "static" or item['method']|lower == "manual" %}
+auto {{ item['name'] }}
+iface {{ item['name'] }} inet {{ item['method']|lower }}
+{%         if item['address'] is defined and item['address'] != None %}
+  address {{ item['address'] }}
+{%         endif %}
+{%         if item['netmask'] is defined and item['netmask'] != None %}
+  netmask {{ item['netmask'] }}
+{%         endif %}
+{%         if item['gateway'] is defined and item['gateway'] != None %}
+  gateway {{ item['gateway'] }}
+{%         endif %}
+{%       endif %}
+{%       if item['method']|lower == "dhcp" %}
+auto {{ item['name'] }}
+iface {{ item['name'] }} inet {{ item['method']|lower }}
+{%       endif %}
+{%       if item['wireless_network'] is defined and item['wireless_network'] %}
+  wpa-ssid {{ item['wpa_ssid'] }}
+  wpa-psk {{ item['wpa_psk'] }}
+{%       endif %}
+{%       if item['parameters'] is defined and item['parameters'] != None %}
+{%         for param in item['parameters'] %}
+  {{ param['param'] }} {{ param['val'] }}
+{%         endfor %}
+{%       endif %}
+{%     endif %}
+
+{%   endfor %}
+{% endif %}

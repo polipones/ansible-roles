@@ -1,0 +1,21 @@
+# Ansible managed
+# Remote logging configuration
+
+# Setup local buffer, if remote server is down or there are other problems with network
+# https://www.rsyslog.com/doc/master/tutorials/reliable_forwarding.html
+$ActionQueueType LinkedList                 # use asynchronous processing
+$ActionQueueFileName centralserverlogging   # set file name, also enables disk mode
+$ActionResumeRetryCount -1                  # infinite retries on insert failure
+$ActionQueueSaveOnShutdown on               # save in-memory data if rsyslog shuts down
+
+{% if rsyslog_use_relp is defined and rsyslog_use_relp %}
+module(load="omrelp")                   # provides support for sending RELP messages (over TCP)
+module(load="immark" interval="180")    # provides --MARK-- message capability (periodic heartbeat messages)
+
+# Remote logging server - RELP protocol
+*.*                         :omrelp:{{ rsyslog_hostname }}:{{ rsyslog_port }}
+{% else %}
+# Remote logging server
+# @ - UDP, @@ - TCP
+*.*                         @@{{ rsyslog_hostname }}:{{ rsyslog_port }}
+{% endif %}

@@ -1,0 +1,33 @@
+- name: Ensure rsyslog is installed
+  apt:
+    pkg:
+      - rsyslog
+
+- name: Ensure RELP support is installed
+  apt:
+    pkg:
+      - rsyslog-relp
+  when: rsyslog_use_relp | bool
+
+- name: Enable rsyslog service on boot
+  service:
+    name: rsyslog
+    enabled: yes
+
+- name: Copy remote logging configuration to host
+  template:
+    src: "70-remote-logging.conf.j2"
+    dest: "/etc/rsyslog.d/70-remote-logging.conf"
+    force: yes
+
+- name: Add remote logging server hostname and IP to /etc/hosts
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    regexp: '{{ rsyslog_hostname | regex_escape() }}'
+    line: "{{ rsyslog_ip_address }} {{ rsyslog_hostname }}"
+    backup: yes
+
+- name: Restart rsyslog
+  service:
+    name: rsyslog
+    state: restarted

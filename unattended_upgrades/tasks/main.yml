@@ -1,0 +1,27 @@
+---
+# Ansible role
+#
+# Setup unattended security upgrades
+
+- name: Install unattended-upgrades package
+  apt:
+    name:
+      - 'unattended-upgrades'
+      - 'apt-listchanges'
+    state: present
+
+
+- name: Set variables for legacy systems
+  include_vars: 'legacy.yml'
+  when:
+    - ansible_facts['distribution'] == 'Debian'
+    - ansible_facts['distribution_major_version']|int < 11
+
+- name: Configure unattended upgrades
+  lineinfile:
+    path: '/etc/apt/apt.conf.d/50unattended-upgrades'
+    regexp: '^\s*{{ item.key }}\b'
+    line: '{{ item.key }} "{{ item.value }}";'
+  loop: '{{ unattended_upgrades_config }}'
+
+...

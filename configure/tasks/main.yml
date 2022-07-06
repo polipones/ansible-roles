@@ -1,0 +1,109 @@
+#####################################################################
+# Packages
+- name: Update all packages to their latest version
+  apt:
+    name: "*"
+    state: latest
+    update_cache: yes
+  when: apt_update_packages|bool
+  tags:
+    - apt
+
+- name: Install basic packages
+  apt:
+    pkg:
+      - sudo
+      - vim
+      - qemu-guest-agent
+      - htop
+      - wget
+      - curl
+      - git
+      - rsync
+      - tree
+      - nmap
+      - tcpdump
+    update_cache: yes
+  tags:
+    - apt
+
+#####################################################################
+# Unattended upgrades
+
+- include_role:
+    name: unattended_upgrades
+    apply:
+      tags:
+        - unattended-upgrades
+  when: apt_enable_unattended_upgrades|bool
+  tags:
+    - unattended-upgrades
+
+#####################################################################
+# Network interfaces
+
+- include_tasks: network_interfaces.yml
+  when: net_config_interfaces|bool
+
+#####################################################################
+# Postfix setup
+
+- include_tasks: 
+    file: setup_postfix.yml
+    apply:
+      tags:
+        - postfix
+  when: postfix_setup|bool
+  tags:
+    - postfix
+
+#####################################################################
+# Users
+- include_role:
+    name: users
+  tags:
+    - users
+
+#####################################################################
+# Firewall
+# https://wiki.nftables.org/wiki-nftables/index.php/Quick_reference-nftables_in_10_minutes
+
+- include_tasks: nftables.yml
+  when: nft_configure|bool
+  tags:
+    - firewall
+
+#####################################################################
+# Fail2Ban
+
+- include_tasks: fail2ban.yml
+  when: fail2ban_configure|bool
+  tags:
+    - fail2ban
+
+#####################################################################
+# Setup remote syslog
+
+- include_tasks: rsyslog.yml
+  when: rsyslog_configure|bool
+  tags:
+    - syslog
+
+#####################################################################
+# Setup docker
+
+- name: Install docker and docker-compose
+  include_role:
+    name: docker
+    apply:
+      tags:
+        - docker
+  when: docker_configure|bool
+  tags:
+    - docker
+
+- name: Reboot machine
+  reboot:
+  when: reboot_do|bool
+  tags:
+    - reboot

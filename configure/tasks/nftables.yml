@@ -1,0 +1,49 @@
+- name: Install nftables
+  apt:
+    pkg:
+      - nftables
+
+- name: nft - Enable nftables on startup
+  service:
+    name: nftables
+    enabled: yes
+
+- name: nft - Copy default config
+  copy:
+    src: nftables.conf
+    dest: /etc/nftables.conf
+
+- name: nft - Load base of new config
+  shell:
+    cmd: nft -f /etc/nftables.conf
+
+- name: nft - Enable TCP traffic from allowed subnets
+  shell:
+    cmd: nft add rule inet filter input ip saddr { "{{ nft_allow_ip_subnets }}" } tcp dport { "{{ nft_tcp_accept_restricted }}" } accept
+  when: (nft_allow_ip_subnets is defined) and (nft_allow_ip_subnets|length > 0) and (nft_tcp_accept_restricted is defined) and (nft_tcp_accept_restricted|length > 0)
+
+
+- name: nft - Enable UDP traffic from allowed subnets
+  shell:
+    cmd: nft add rule inet filter input ip saddr { "{{ nft_allow_ip_subnets }}" } udp dport { "{{ nft_udp_accept_restricted }}" } accept
+  when: (nft_allow_ip_subnets is defined) and (nft_allow_ip_subnets|length > 0) and (nft_udp_accept_restricted is defined) and (nft_udp_accept_restricted|length > 0)
+
+
+- name: nft - Enable TCP traffic from Internet
+  shell:
+    cmd: nft add rule inet filter input tcp dport { "{{ nft_tcp_accept }}" } accept
+  when: (nft_tcp_accept is defined) and (nft_tcp_accept|length > 0)
+
+- name: nft - Enable UDP traffic from Internet
+  shell:
+    cmd: nft add rule inet filter input udp dport { "{{ nft_udp_accept }}" } accept
+  when: (nft_udp_accept is defined) and (nft_udp_accept|length > 0)
+
+- name: nft - Apply new config
+  shell:
+    cmd: nft list ruleset > /etc/nftables.conf
+
+- name: nft - Restart nft service
+  service:
+    name: nftables
+    state: restarted

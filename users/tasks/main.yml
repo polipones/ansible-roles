@@ -1,0 +1,72 @@
+# Allow sudo group passwordless sudo
+- name: Allow 'sudo' group to have passwordless sudo
+  lineinfile:
+    path: /etc/sudoers
+    state: present
+    regexp: "^%sudo"
+    line: "%sudo ALL=(ALL) NOPASSWD: ALL"
+    validate: "/usr/sbin/visudo -cf %s"
+
+# Disable password login
+- name: Disable SSH password login
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "^#?PasswordAuthentication.*yes"
+    line: "PasswordAuthentication=no"
+  notify: restart_sshd
+
+# Create new users
+- name: Create users
+  user:
+    name: "{{ item.name }}"
+    state: present
+    groups: "{{ item.groups }}"
+    password_lock: yes
+    shell: /bin/bash
+  loop: "{{ users }}"
+
+# Add SSH keys to user accounts
+- name: Add ssh keys from key file
+  authorized_key:
+    key: "{{ lookup('file', item.key_file) }}"
+    user: "{{ item.name }}"
+    exclusive: True # Remove all other keys
+  loop: "{{ users }}"
+  when: item.key_file is defined
+
+# Add SSH keys to user accounts
+- name: Add ssh keys from URL
+  authorized_key:
+    key: "{{ item.key_url }}"
+    user: "{{ item.name }}"
+    exclusive: True # Remove all other keys
+  loop: "{{ users }}"
+  when: item.key_url is defined
+
+# Copy .bashrc
+- name: Replace default .bashrc
+  copy:
+    src: .bashrc
+    dest: "/home/{{ item.name }}/.bashrc"
+    force: yes
+    owner: "{{ item.name }}"
+    group: "{{ item.name }}"
+  loop: "{{ users }}"
+
+# Copy .bashrc
+- name: Replace default .bashrc for root
+  copy:
+    src: .bashrc
+    dest: /root/.bashrc
+    force: yes
+    owner: root
+    group: root
+
+# Replace .bashrc in /etc/skel
+- name: Replace .bashrc in /etc/skel (for new users)
+  copy:
+    src: .bashrc
+    dest: /etc/skel/.bashrc
+    force: yes
+    owner: root
+    group: root
