@@ -1,0 +1,94 @@
+#################################################
+# Apt
+apt_update_packages: true
+apt_enable_unattended_upgrades: true
+
+#################################################
+# Network interfaces
+# Copied from: https://github.com/mrlesmithjr/ansible-config-interfaces/tree/26372c8a482cad2163f11e0e4a597b6795f0b8dc
+
+# Defines if interfaces should be configured as defined
+net_config_interfaces: false
+
+# Defines if interfaces should be brought up after defining. This can be overridden
+# with the `enable` option per interface.
+net_enable_configured_interfaces_after_defining: true
+
+# Defines network interfaces
+net_interfaces:
+  - name: ens18
+    configure: true
+    method: dhcp
+  # - name: ens19
+  #   configure: true
+  #   method: static
+  #   address: 10.0.99.251
+  #   netmask: 255.255.0.0
+
+#################################################
+# Postfix variables
+
+postfix_setup: true
+# Specify relayhost for your emails (without auth)
+postfix_relayhost: # TODO - Fill
+
+#################################################
+# Nft variables
+nft_configure: false
+
+# Subnet or IP to allow traffic on selected ports, multiple values delimited by comma - ','
+nft_allow_ip_subnets: # TODO - Fill
+
+# Enable input traffic on ports only from defined subnets, delimited by comma - ','
+nft_tcp_accept_restricted: "22"
+nft_udp_accept_restricted: ""
+
+# Enable input traffic on ports from whole Internet, delimited by comma - ','
+nft_tcp_accept: ""
+nft_udp_accept: ""
+
+#################################################
+# Fail2Ban
+# https://github.com/Oefenweb/ansible-fail2ban
+fail2ban_configure: false
+
+fail2ban_services:
+  - name: sshd
+    port: 22
+    bantime: 3600
+# Default: auto (check fail2ban service after setup, if failing because of nonexistent ssh logs, try setting this to 'systemd')
+fail2ban_backend: auto
+
+#################################################
+# Logging
+rsyslog_configure: true
+
+# We need hostname and IP to add entry to /etc/hosts in case of DNS fail
+rsyslog_hostname: # TODO - Fill
+rsyslog_ip_address: # TODO - Fill
+# Strongly recommended to use RELP: https://rainer.gerhards.net/2008/04/on-unreliability-of-plain-tcp-syslog.html
+rsyslog_use_relp: true
+# Use 514 for TCP, 2514 for RELP (by default)
+rsyslog_port: "2514"
+
+#################################################
+# Docker
+docker_configure: false
+
+docker_apt_arch: amd64
+
+# Docker with NFT firewall
+# Using NFT with docker is not recommended because it has issues!
+docker_use_nft: "{{ nft_configure }}"
+
+# Include users who will have docker group
+docker_users: [] # TODO - Fill
+
+docker_install_compose: true
+docker_compose_version: "v2.6.1"
+
+#################################################
+# Reboot
+# Reboot hosts after configuring
+
+reboot_do: true

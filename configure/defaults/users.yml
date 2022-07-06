@@ -1,0 +1,13 @@
+#################################################
+# Add users variables
+
+# User definitions
+# Example:
+# users:
+#   - name: "john"
+#     groups:
+#       - users
+#       - sudo
+#     key_url: "https://github.com/john.keys"
+
+users: []
