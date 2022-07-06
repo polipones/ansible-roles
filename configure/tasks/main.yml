@@ -5,6 +5,7 @@
     name: "*"
     state: latest
     update_cache: yes
+    autoremove: yes
   when: apt_update_packages|bool
   tags:
     - apt
@@ -102,8 +103,8 @@
   tags:
     - docker
 
-- name: Reboot machine
-  reboot:
-  when: reboot_do|bool
+- include_tasks: reboot.yml
+  when: reboot_all|bool or reboot_if_required|bool
   tags:
     - reboot
+    - reboot-if-required
