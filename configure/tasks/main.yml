@@ -24,6 +24,7 @@
       - tree
       - nmap
       - tcpdump
+      - gnupg
     update_cache: yes
   tags:
     - apt
