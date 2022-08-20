@@ -1,0 +1,8 @@
+#################################################
+# GlusterFS config variables
+
+gluster_apt_arch: amd64
+gluster_version: 10
+
+gluster_disk: /dev/sdx
+gluster_mount_path: /mnt/gluster

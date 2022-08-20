@@ -104,6 +104,23 @@
   tags:
     - docker
 
+
+#####################################################################
+# Setup GlusterFS server node
+
+- name: Install GlusterFS server node
+  include_role:
+    name: glusterfs-server
+    apply:
+      tags:
+        - glusterfs-server
+  when: gluster_configure|bool
+  tags:
+    - glusterfs-server
+
+#####################################################################
+# Reboot
+
 - include_tasks: reboot.yml
   when: reboot_all|bool or reboot_if_required|bool
   tags:

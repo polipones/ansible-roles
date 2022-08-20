@@ -1,0 +1,27 @@
+- name: Create partition on disk
+  community.general.parted:
+    device: "{{ gluster_disk }}"
+    number: 1
+    state: present
+
+- name: Create XFS filesystem
+  community.general.filesystem:
+    dev: "{{ gluster_disk }}1"
+    fstype: xfs
+    opts: "-i size=512"
+    state: present
+
+- name: Create mount directory
+  file:
+    path: "{{ gluster_mount_path }}"
+    owner: root
+    group: root
+    mode: '0740'
+    state: directory
+
+- name: Mount partition (and set to mount on boot)
+  ansible.posix.mount:
+    path: "{{ gluster_mount_path }}"
+    src: "{{ gluster_disk }}1"
+    fstype: xfs
+    state: mounted

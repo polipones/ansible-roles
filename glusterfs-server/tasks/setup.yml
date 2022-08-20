@@ -1,0 +1,19 @@
+- name: Ensure dependencies are installed
+  apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - gnupg2
+    state: present
+
+- name: Add GlusterFS apt key
+  apt_key:
+    url: "https://download.gluster.org/pub/gluster/glusterfs/{{ gluster_version }}/rsa.pub"
+    id: 390EDEE107B9BA8F610B322CA2DC392C1C594A2B
+    state: present
+
+- name: Add GlusterFS repository
+  apt_repository:
+    repo: "deb [arch={{ gluster_apt_arch }}] https://download.gluster.org/pub/gluster/glusterfs/{{ gluster_version }}/LATEST/Debian/{{ ansible_distribution_release }}/amd64/apt {{ ansible_distribution_release }} main"
+    state: present
+    update_cache: true
