@@ -3,3 +3,9 @@
     pkg:
       - glusterfs-server
     update_cache: yes
+
+- name: Enable glusterd service
+  service:
+    name: glusterd
+    enabled: yes
+  notify: restart glusterd service

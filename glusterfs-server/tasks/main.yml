@@ -2,7 +2,7 @@
   include_tasks: setup.yml
 
 - name: Install GlusterFS server node
-  include_tasks: setup.yml
+  include_tasks: install.yml
 
 - name: Prepare disk for volume
   include_tasks: prepare_disk.yml

@@ -4,12 +4,13 @@
       - apt-transport-https
       - ca-certificates
       - gnupg2
+      - parted
     state: present
 
 - name: Add GlusterFS apt key
   apt_key:
     url: "https://download.gluster.org/pub/gluster/glusterfs/{{ gluster_version }}/rsa.pub"
-    id: 390EDEE107B9BA8F610B322CA2DC392C1C594A2B
+    id: F9C958A3AEE0D2184FAD1CBD43607F0DC2F8238C
     state: present
 
 - name: Add GlusterFS repository
