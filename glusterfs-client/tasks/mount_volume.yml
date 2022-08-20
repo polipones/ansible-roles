@@ -1,0 +1,14 @@
+- name: Create mount directory
+  file:
+    path: "{{ gluster_mount_path }}"
+    owner: root
+    group: root
+    mode: '0740'
+    state: directory
+
+- name: Mount partition (and set to mount on boot)
+  ansible.posix.mount:
+    path: "{{ gluster_mount_path }}"
+    src: "{{ gluster_host }}:/{{ gluster_volume }}"
+    fstype: glusterfs
+    state: mounted

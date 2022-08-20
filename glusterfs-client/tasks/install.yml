@@ -1,0 +1,5 @@
+- name: Install GlusterFS client
+  apt:
+    pkg:
+      - glusterfs-client
+    update_cache: yes

@@ -1,0 +1,8 @@
+- name: Setup GlusterFS repo
+  include_tasks: setup.yml
+
+- name: Install GlusterFS client
+  include_tasks: install.yml
+
+- name: Mount volume
+  include_tasks: mount_volume.yml

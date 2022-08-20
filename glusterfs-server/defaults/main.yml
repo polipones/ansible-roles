@@ -1,5 +1,5 @@
 #################################################
-# GlusterFS config variables
+# GlusterFS server config variables
 
 gluster_apt_arch: amd64
 gluster_version: 10

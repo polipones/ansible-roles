@@ -1,0 +1,10 @@
+#################################################
+# GlusterFS client config variables
+
+gluster_apt_arch: amd64
+gluster_version: 10
+
+gluster_host: localhost
+gluster_volume: gv0
+
+gluster_mount_path: /data/gluster
