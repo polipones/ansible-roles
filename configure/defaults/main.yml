@@ -87,6 +87,8 @@ docker_users: [] # TODO - Fill
 docker_install_compose: true
 docker_compose_version: "v2.6.1"
 
+docker_cron_clean: true
+
 #################################################
 # GlusterFS config variables
 
