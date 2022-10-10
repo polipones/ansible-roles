@@ -114,9 +114,22 @@
     apply:
       tags:
         - glusterfs-server
-  when: gluster_configure|bool
+  when: gluster_server_configure|bool
   tags:
     - glusterfs-server
+
+#####################################################################
+# Setup GlusterFS client
+
+- name: Install GlusterFS client
+  include_role:
+    name: glusterfs-client
+    apply:
+      tags:
+        - glusterfs-client
+  when: gluster_client_configure|bool
+  tags:
+    - glusterfs-client
 
 #####################################################################
 # Reboot

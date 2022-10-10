@@ -88,6 +88,29 @@ docker_install_compose: true
 docker_compose_version: "v2.6.1"
 
 #################################################
+# GlusterFS config variables
+
+gluster_apt_arch: amd64
+gluster_version: 10
+
+gluster_mount_path: /mnt/gluster
+
+#################################################
+# GlusterFS server specific node config variables
+
+gluster_server_configure: false
+
+gluster_disk: /dev/vdc
+
+#################################################
+# GlusterFS client specific config variables
+
+gluster_client_configure: false
+
+gluster_host: localhost
+gluster_volume: gv0
+
+#################################################
 # Reboot
 # Reboot hosts after configuring
 
