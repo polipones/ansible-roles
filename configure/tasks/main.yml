@@ -132,6 +132,19 @@
     - glusterfs-client
 
 #####################################################################
+# Install Postgres
+
+- name: Install Postgres
+  include_role:
+    name: postgres
+    apply:
+      tags:
+        - postgres
+  when: postgres_configure|bool
+  tags:
+    - postgres
+
+#####################################################################
 # Reboot
 
 - include_tasks: reboot.yml

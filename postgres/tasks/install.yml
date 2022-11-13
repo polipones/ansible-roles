@@ -1,0 +1,31 @@
+- name: Install needed packages
+  apt:
+    pkg:
+    - debian-keyring
+    - apt-transport-https
+
+- name: Check repository key presence
+  stat:
+    path: "/usr/share/keyrings/{{ postgres_repo_pgp_key_name }}"
+  register: gpg_key
+
+- name: Download Postgres apt repository key
+  ansible.builtin.get_url:
+    url: "{{ postgres_repo_key_url }}"
+    dest: /tmp/postgres-12.asc
+    mode: '0700'
+    force: true
+  when: not gpg_key.stat.exists
+
+- name: Convert asc to gpg key
+  shell: "cat /tmp/postgres-12.asc | gpg --dearmor > /usr/share/keyrings/{{ postgres_repo_pgp_key_name }}"
+  when: not gpg_key.stat.exists
+
+- name: Add Postgres apt repository source
+  shell: "echo \"deb [signed-by=/usr/share/keyrings/{{ postgres_repo_pgp_key_name }}] {{ postgres_repo_url }}\" > /etc/apt/sources.list.d/postgres.list"
+  when: not gpg_key.stat.exists
+
+- name: Install postgres 12
+  apt:
+    name: postgresql-12
+    update_cache: yes

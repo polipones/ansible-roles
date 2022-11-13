@@ -113,6 +113,16 @@ gluster_host: localhost
 gluster_volume: gv0
 
 #################################################
+# Postgres
+
+postgres_configure: false
+
+# https://www.postgresql.org/download/linux/debian/
+postgres_repo_url: "http://apt.postgresql.org/pub/repos/apt {{ ansible_distribution_release }}-pgdg main"
+postgres_repo_key_url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
+postgres_repo_pgp_key_name: postgres-12.pgp
+
+#################################################
 # Reboot
 # Reboot hosts after configuring
 
