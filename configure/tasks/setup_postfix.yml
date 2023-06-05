@@ -28,8 +28,8 @@
 - name: Set alias for root mail user
   lineinfile:
     path: "/etc/aliases"
-    regexp: '^root: sys@pod.cvut.cz'
-    line: "root: sys@pod.cvut.cz"
+    regexp: "^root: {{ postfix_alias }}"
+    line: "root: {{ postfix_alias }}"
 
 - name: Generate new aliases
   command: newaliases
