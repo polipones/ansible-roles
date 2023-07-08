@@ -1,0 +1,5 @@
+- name: restart rsyslog service
+  service:
+    name: rsyslog
+    state: restarted
+  ignore_errors: "{{ ansible_check_mode }}"

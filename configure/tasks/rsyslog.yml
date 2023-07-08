@@ -8,17 +8,20 @@
     pkg:
       - rsyslog-relp
   when: rsyslog_use_relp | bool
+  notify: restart rsyslog service
 
 - name: Enable rsyslog service on boot
   service:
     name: rsyslog
     enabled: yes
+  ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Copy remote logging configuration to host
   template:
     src: "70-remote-logging.conf.j2"
     dest: "/etc/rsyslog.d/70-remote-logging.conf"
     force: yes
+  notify: restart rsyslog service
 
 - name: Add remote logging server hostname and IP to /etc/hosts
   ansible.builtin.lineinfile:
@@ -26,8 +29,4 @@
     regexp: '{{ rsyslog_hostname | regex_escape() }}'
     line: "{{ rsyslog_ip_address }} {{ rsyslog_hostname }}"
     backup: yes
-
-- name: Restart rsyslog
-  service:
-    name: rsyslog
-    state: restarted
+  notify: restart rsyslog service
