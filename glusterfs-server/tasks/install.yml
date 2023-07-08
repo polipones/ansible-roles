@@ -9,3 +9,6 @@
     name: glusterd
     enabled: yes
   notify: restart glusterd service
+
+- name: Flush ansible handlers
+  meta: flush_handlers

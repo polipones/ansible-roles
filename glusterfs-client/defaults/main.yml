@@ -7,4 +7,4 @@ gluster_version: 10
 gluster_host: localhost
 gluster_volume: gv0
 
-gluster_mount_path: /data/gluster
+gluster_client_mount_path: /data/gluster

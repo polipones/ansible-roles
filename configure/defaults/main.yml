@@ -95,14 +95,13 @@ docker_cron_clean: true
 gluster_apt_arch: amd64
 gluster_version: 10
 
-gluster_mount_path: /mnt/gluster
-
 #################################################
 # GlusterFS server specific node config variables
 
 gluster_server_configure: false
 
 gluster_disk: /dev/vdc
+gluster_server_mount_path: /mnt/gluster
 
 #################################################
 # GlusterFS client specific config variables
@@ -111,6 +110,7 @@ gluster_client_configure: false
 
 gluster_host: localhost
 gluster_volume: gv0
+gluster_client_mount_path: /data/gluster
 
 #################################################
 # Postgres
