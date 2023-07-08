@@ -33,6 +33,7 @@
     exclusive: True # Remove all other keys
   loop: "{{ users }}"
   when: item.key_file is defined
+  ignore_errors: "{{ ansible_check_mode }}"
 
 # Add SSH keys to user accounts
 - name: Add ssh keys from URL
@@ -42,6 +43,7 @@
     exclusive: True # Remove all other keys
   loop: "{{ users }}"
   when: item.key_url is defined
+  ignore_errors: "{{ ansible_check_mode }}"
 
 # Copy .bashrc
 - name: Replace default .bashrc
