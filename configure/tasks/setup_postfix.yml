@@ -30,6 +30,7 @@
     path: "/etc/aliases"
     regexp: "^root: {{ postfix_alias }}"
     line: "root: {{ postfix_alias }}"
+  ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Generate new aliases
   command: newaliases
