@@ -12,19 +12,7 @@
 
 - name: Install basic packages
   apt:
-    pkg:
-      - sudo
-      - vim
-      - qemu-guest-agent
-      - htop
-      - wget
-      - curl
-      - git
-      - rsync
-      - tree
-      - nmap
-      - tcpdump
-      - gnupg
+    pkg: "{{ apt_base_packages }}"
     update_cache: yes
   tags:
     - apt

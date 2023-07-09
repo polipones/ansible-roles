@@ -2,6 +2,19 @@
 # Apt
 apt_update_packages: true
 apt_enable_unattended_upgrades: true
+apt_base_packages:
+  - sudo
+  - vim
+  - qemu-guest-agent
+  - htop
+  - wget
+  - curl
+  - git
+  - rsync
+  - tree
+  - nmap
+  - tcpdump
+  - gnupg
 
 #################################################
 # Network interfaces
