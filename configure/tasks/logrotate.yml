@@ -1,0 +1,9 @@
+- name: Copy logrotate config
+  copy:
+    src: rsyslog
+    dest: /etc/logrotate.d/rsyslog
+
+- name: Run logrotate
+  shell:
+    cmd: logrotate -v /etc/logrotate.d/rsyslog
+  when: logrotate_run_now|bool

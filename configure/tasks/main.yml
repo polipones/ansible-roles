@@ -38,7 +38,7 @@
 #####################################################################
 # Postfix setup
 
-- include_tasks: 
+- include_tasks:
     file: setup_postfix.yml
     apply:
       tags:
@@ -72,6 +72,18 @@
     - fail2ban
 
 #####################################################################
+# Setup logrotate
+
+- include_tasks:
+    file: logrotate.yml
+    apply:
+      tags:
+        - logrotate
+  when: logrotate_configure|bool
+  tags:
+    - logrotate
+
+#####################################################################
 # Setup remote syslog
 
 - include_tasks: rsyslog.yml
@@ -91,7 +103,6 @@
   when: docker_configure|bool
   tags:
     - docker
-
 
 #####################################################################
 # Setup GlusterFS server node
