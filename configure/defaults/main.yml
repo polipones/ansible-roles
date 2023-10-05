@@ -85,6 +85,12 @@ rsyslog_use_relp: true
 rsyslog_port: "2514"
 
 #################################################
+# Logrotate
+
+logrotate_configure: true
+logrotate_run_now: true
+
+#################################################
 # Docker
 docker_configure: false
 
