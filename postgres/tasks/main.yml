@@ -1,1 +1,10 @@
 - include_tasks: install.yml
+
+- include_tasks:
+    file: prometheus_exporter.yml
+    apply:
+      tags:
+        - postgres-prometheus-exporter
+  when: postgres_prometheus_exporter_enabled|bool
+  tags:
+    - postgres-prometheus-exporter

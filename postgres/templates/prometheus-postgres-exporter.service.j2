@@ -1,0 +1,10 @@
+[Unit]
+Description=Prometheus Postgres Exporter Server
+
+[Service]
+User={{ prometheus_postgres_system_user }}
+Environment="DATA_SOURCE_NAME={{ postgres_prometheus_exporter_data_source_name }}"
+ExecStart=/opt/prometheus/postgres_exporter/postgres_exporter {% for flag in postgres_prometheus_exporter_flags %}{{ flag }} {% endfor %}
+
+[Install]
+WantedBy=multi-user.target

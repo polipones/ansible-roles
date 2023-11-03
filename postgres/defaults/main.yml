@@ -4,3 +4,14 @@ postgres_repo_pgp_key_name: postgres.pgp
 
 # Specify only major version
 postgres_version: 15
+
+# Prometheus exporter
+postgres_prometheus_exporter_enabled: false
+
+postgres_prometheus_exporter_version: 0.14.0
+prometheus_postgres_system_user: postgres
+
+postgres_prometheus_exporter_data_source_name: "user=postgres host=/var/run/postgresql/ sslmode=disable"
+postgres_prometheus_exporter_flags:
+  - '--collector.long_running_transactions'
+  - '--web.listen-address :9187'
