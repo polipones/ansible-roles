@@ -1,0 +1,7 @@
+- name: Check node has static IP
+  shell:
+    cmd: ip a | grep 'scope global'
+  register: ip_out
+
+- debug:
+    var: ip_out.stdout_lines

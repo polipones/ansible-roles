@@ -1,4 +1,15 @@
 #####################################################################
+# Info
+- include_tasks:
+    file: info.yml
+    apply:
+      tags:
+        - info
+  when: info_print|bool
+  tags:
+    - info
+
+#####################################################################
 # Packages
 - name: Update all packages to their latest version
   apt:
